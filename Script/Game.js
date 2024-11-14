@@ -1,83 +1,71 @@
-const words=["Mango","Watermelon","Strawberry","Grapes","Orange"];
-const maxAttempts=6;
+const words = ["strawberry", "kiwi", "mango", "watermelon", "orange"];
+const maxAttempts = 6;
 let chosenWord;
 let displayedWordArray;
 let lifeCount;
 let guessedLetters;
-
-function startGame(){
+function startGame() {
     chosenWord = words[Math.floor(Math.random() * words.length)];
     displayedWordArray = Array(chosenWord.length).fill("_");
     lifeCount = maxAttempts;
     guessedLetters = [];
-
     console.log("New Game Started!");
-    console.log("Chosen Word:",chosenWord);
-    console.log("Initial Displayed Word:",displayedWordArray.join(" "));
-    console.log("lifeCount:", maxAttempts);
-
+    console.log("Chosen Word:", chosenWord);
     updateDisplay();
-
-    while (lifeCount > 0 && displayedWordArray.includes("_")) {
-        let guess = prompt(`Guess a letter:\n\n${displayedWordArray.join(" ")}\nlifeCount: ${lifeCount}\nGuessedLetters:${guessedLetters.join(",")}`);
-
-        if(guess === null) {
+    playRound();
+}
+function playRound() {
+    if (lifeCount > 0 && displayedWordArray.includes("_")) {
+        let guess = prompt(`Guess a letter & Note: All letters are lowercase. \n\n${displayedWordArray.join(" ")}\nAttempts Left: ${lifeCount}\nGuessed Letters: ${guessedLetters.join(", ")}`);
+        if (guess === null) {
             alert("Game cancelled.");
             console.log("Game cancelled by user.");
             return;
         }
-
+        if (guess.length !== 1 || !/^[a-zA-Z]$/.test(guess)) {
+            alert("Please enter a single valid letter.");
+            console.log("Invalid input detected:", guess);
+            playRound();
+            return;
+        }
         guess = guess.toLowerCase();
-        if(guess.length !== 1 ||!/^[a-z]$/.test(guess)){
-            alert("Please enter a sigle letter.");
-            console.log("Invalid input:",guess);
-            continue;
+        if (guessedLetters.includes(guess)) {
+            alert("You already guessed that letter. Try a different one.");
+            console.log("Duplicate guess detected:", guess);
+            playRound();
+            return;
         }
-
-    
-
-    if(guessedLetters.includes(guess)){
-    alert("You have already guessed that letter.Try a different one.");
-    console.log("Duplicate guess:",guess);
-    continue;
-}
-
-    guessedLetters.push(guess);
-    console.log("Guessed Letter:", guess);
-
-    if (chosenWord.includes(guess)) {
-        console.log(`Correct! The letter "${guess}" is in the word.`);
-
-        for (let i = 0; i < chosenWord.length; i++) {
-            if (chosenWord[i] === guess) {
-                displayedWordArray[i] = guess;
+        guessedLetters.push(guess);
+        console.log("New guessed letter:", guess);
+        if (chosenWord.includes(guess)) {
+            console.log(`Correct guess! The letter "${guess}" is in the word.`);
+            for (let i = 0; i < chosenWord.length; i++) {
+                if (chosenWord[i] === guess) {
+                    displayedWordArray[i] = guess;
+                }
             }
+            console.log("Updated Displayed Word Array:", displayedWordArray);
+        } else {
+            lifeCount--;
+            console.log(`Incorrect guess. Attempts remaining: ${lifeCount}`);
         }
+        updateDisplay();
+        playRound();
     } else {
-        lifeCount--;
-        console.log(`Incorrect. lifeCount: ${lifeCount}`);
-    }
-
-    updateDisplay();
-}
-
-    if (!displayedWordArray.includes("_")) {
-       alert(`Congratulation! You guessed the word: ${chosenWord}`);
-       console.log("Game Result: Win!");
-}   else if (lifeCount === 0) {
-       alert(`Game over! The word was: ${chosenWord}`);
-       console.log("Game Result: Loss.");
+        if (!displayedWordArray.includes("_")) {
+            alert(`Congratulations! You guessed the word: ${chosenWord}`);
+            console.log("Game Result: Win!");
+        } else if (lifeCount === 0) {
+            alert(`Sorry, you've run out of attempts. The word was: ${chosenWord}`);
+            console.log("Game Result: Loss.");
+        }
     }
 }
-
 function updateDisplay() {
     document.getElementById("displayedWord").textContent = displayedWordArray.join(" ");
     document.getElementById("lifeCount").textContent = lifeCount;
-    document.getElementById("guessedLetters").textContent = guessedLetters.join(",");
-
-
-    console.log("Current Word:", displayedWordArray.join(" "));
-    console.log("lifeCount:", lifeCount);
-    console.log("Guessed Letters:", guessedLetters.join(","));
-
+    document.getElementById("guessedLetters").textContent = guessedLetters.join(", ");
+    console.log("Displayed Word:", displayedWordArray.join(" "));
+    console.log("Attempts Left:", lifeCount);
+    console.log("Guessed Letters:", guessedLetters.join(", "));
 }
