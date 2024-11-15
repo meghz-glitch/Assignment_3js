@@ -4,6 +4,7 @@ let chosenWord;
 let displayedWordArray;
 let lifeCount;
 let guessedLetters;
+
 function startGame() {
     chosenWord = words[Math.floor(Math.random() * words.length)];
     displayedWordArray = Array(chosenWord.length).fill("_");
@@ -65,6 +66,7 @@ function updateDisplay() {
     document.getElementById("displayedWord").textContent = displayedWordArray.join(" ");
     document.getElementById("lifeCount").textContent = lifeCount;
     document.getElementById("guessedLetters").textContent = guessedLetters.join(", ");
+
     console.log("Displayed Word:", displayedWordArray.join(" "));
     console.log("Attempts Left:", lifeCount);
     console.log("Guessed Letters:", guessedLetters.join(", "));
