@@ -26,15 +26,13 @@ function playRound() {
         if (guess.length !== 1 || !/^[a-zA-Z]$/.test(guess)) {
             alert("Please enter a single valid letter.");
             console.log("Invalid input detected:", guess);
-            playRound();
-            return;
+           continue;
         }
         guess = guess.toLowerCase();
         if (guessedLetters.includes(guess)) {
             alert("You already guessed that letter. Try a different one.");
             console.log("Duplicate guess detected:", guess);
-            playRound();
-            return;
+            continue;
         }
         guessedLetters.push(guess);
         console.log("New guessed letter:", guess);
@@ -51,8 +49,7 @@ function playRound() {
             console.log(`Incorrect guess. Attempts remaining: ${lifeCount}`);
         }
         updateDisplay();
-        playRound();
-    } else {
+    }
         if (!displayedWordArray.includes("_")) {
             alert(`Congratulations! You guessed the word: ${chosenWord}`);
             console.log("Game Result: Win!");
@@ -61,7 +58,6 @@ function playRound() {
             console.log("Game Result: Loss.");
         }
     }
-}
 function updateDisplay() {
     document.getElementById("displayedWord").textContent = displayedWordArray.join(" ");
     document.getElementById("lifeCount").textContent = lifeCount;
