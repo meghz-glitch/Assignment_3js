@@ -16,7 +16,7 @@ function startGame() {
     playRound();
 }
 function playRound() {
-    if (lifeCount > 0 && displayedWordArray.includes("_")) {
+    while (lifeCount > 0 && displayedWordArray.includes("_")) {
         let guess = prompt(`Guess a letter & Note: All letters are lowercase. \n\n${displayedWordArray.join(" ")}\nAttempts Left: ${lifeCount}\nGuessed Letters: ${guessedLetters.join(", ")}`);
         if (guess === null) {
             alert("Game cancelled.");
